@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from sqlalchemy import String, DateTime, ForeignKey, Text, Float, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import Optional
 import enum
 
 from app.core.database import Base
@@ -29,7 +30,7 @@ class Agent(Base):
     status: Mapped[AgentStatus] = mapped_column(
         Enum(AgentStatus), default=AgentStatus.IDLE, nullable=False
     )
-    last_heartbeat: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_heartbeat: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
@@ -48,7 +49,7 @@ class AgentTask(Base):
     status: Mapped[TaskStatus] = mapped_column(
         Enum(TaskStatus), default=TaskStatus.PENDING, nullable=False
     )
-    execution_time: Mapped[float | None] = mapped_column(Float, nullable=True)
+    execution_time: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )

@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from sqlalchemy import String, Text, Integer, DateTime, Enum
 from sqlalchemy.orm import Mapped, mapped_column
+from typing import Optional
 import enum
 
 from app.core.database import Base
@@ -22,12 +23,12 @@ class Policy(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
-    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     policy_type: Mapped[PolicyType] = mapped_column(
         Enum(PolicyType), default=PolicyType.NATURAL_LANGUAGE, nullable=False
     )
-    natural_language: Mapped[str | None] = mapped_column(Text, nullable=True)
-    dsl: Mapped[str | None] = mapped_column(Text, nullable=True)
+    natural_language: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    dsl: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     status: Mapped[PolicyStatus] = mapped_column(
         Enum(PolicyStatus), default=PolicyStatus.DRAFT, nullable=False
     )

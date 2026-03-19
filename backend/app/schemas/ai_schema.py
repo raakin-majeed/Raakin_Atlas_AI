@@ -67,3 +67,23 @@ class ChatResponse(BaseModel):
     role: str
     content: str
     tool_calls: List[Dict[str, Any]] = []
+
+class StudentAnalysis(BaseModel):
+    average_score: float
+    weak_subjects: List[str]
+    risk_level: str
+    attendance: float
+    subject_count: int
+
+
+class StudentAIReport(BaseModel):
+    summary: str
+    risk_explanation: str
+    recovery_plan: List[str]
+    motivation: str
+
+
+class StudentReportResponse(BaseModel):
+    student_id: int
+    analysis: StudentAnalysis
+    ai_report: StudentAIReport

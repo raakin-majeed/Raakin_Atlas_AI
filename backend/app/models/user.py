@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from sqlalchemy import String, Boolean, DateTime, Enum
 from sqlalchemy.orm import Mapped, mapped_column
+from typing import Optional
 import enum
 
 from app.core.database import Base
@@ -34,7 +35,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
-    approved_at: Mapped[datetime | None] = mapped_column(
+    approved_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
-    approved_by: Mapped[int | None] = mapped_column(nullable=True)
+    approved_by: Mapped[Optional[int]] = mapped_column(nullable=True)
