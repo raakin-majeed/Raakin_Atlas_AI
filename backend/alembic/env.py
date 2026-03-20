@@ -6,13 +6,16 @@ from alembic import context
 from app.core.config import settings
 from app.core.database import Base
 from app.models import User, Agent, AgentTask, AuditLog
+from app.models.academic import Student, AcademicRecord  # noqa: F401 - register for SQLModel.metadata
 
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-sync_url = settings.database_url.replace("+asyncpg", "").replace("postgresql+asyncpg", "postgresql")
-target_metadata = Base.metadata
+sync_url = settings.DATABASE_URL.replace("+aiosqlite", "")
+# Include both SQLAlchemy Base and SQLModel metadata for migrations
+from sqlmodel import SQLModel
+target_metadata = [Base.metadata, SQLModel.metadata]
 
 
 def run_migrations_offline() -> None:

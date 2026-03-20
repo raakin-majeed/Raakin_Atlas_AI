@@ -1,5 +1,7 @@
 import asyncio
 from datetime import datetime, timezone
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -37,7 +39,7 @@ async def register_agent(
     return agent
 
 
-@router.get("", response_model=list[AgentResponse])
+@router.get("", response_model=List[AgentResponse])
 async def list_agents(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),

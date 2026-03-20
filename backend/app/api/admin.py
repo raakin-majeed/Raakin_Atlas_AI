@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
@@ -11,7 +13,7 @@ from app.schemas.user_schema import UserResponse
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
-@router.get("/users", response_model=list[UserResponse])
+@router.get("/users", response_model=List[UserResponse])
 async def get_all_users(
     db: AsyncSession = Depends(get_db),
 ):
@@ -21,7 +23,7 @@ async def get_all_users(
     return users
 
 
-@router.get("/users/pending", response_model=list[UserResponse])
+@router.get("/users/pending", response_model=List[UserResponse])
 async def get_pending_users(
     db: AsyncSession = Depends(get_db),
 ):

@@ -1,0 +1,11 @@
+student_id,name,email,attendance,cia1,cia2,mid_sem,end_sem,remarks
+S101,Raakin majeed,Raakinmajeed@gmail.com,58,12,14,35,40,High Risk
+S102,Diya Mehta,diya.mehta@email.com,55,10,13,30,38,High Risk
+S103,Rohan Verma,rohan.verma@email.com,82,18,20,45,50,Average
+S104,Ananya Iyer,ananya.iyer@email.com,78,16,19,42,48,Average
+S105,Kabir Singh,kabir.singh@email.com,97,25,24,48,50,Top
+S106,Meera Nair,meera.nair@email.com,96,24,25,49,50,Top
+S107,Arjun Patel,arjun.patel@email.com,88,20,21,44,47,Good
+S108,Sneha Reddy,sneha.reddy@email.com,72,15,17,40,45,Needs Improvement
+S109,Vikram Joshi,vikram.joshi@email.com,65,14,16,38,42,Below Average
+S110,Pooja Kapoor,pooja.kapoor@email.com,90,22,23,46,49,Good

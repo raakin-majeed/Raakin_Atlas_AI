@@ -14,6 +14,9 @@ class AuditLoggingMiddleware(BaseHTTPMiddleware):
     EXCLUDED_PATHS = {"/health", "/docs", "/redoc", "/openapi.json"}
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        # CORS preflight — pass through without DB / auth work
+        if request.method == "OPTIONS":
+            return await call_next(request)
         # Skip audit logging for excluded paths
         if request.url.path in self.EXCLUDED_PATHS:
             return await call_next(request)

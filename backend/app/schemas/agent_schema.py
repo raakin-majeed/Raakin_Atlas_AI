@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -15,7 +16,7 @@ class AgentResponse(BaseModel):
     name: str
     module_type: str
     status: AgentStatus
-    last_heartbeat: datetime | None
+    last_heartbeat: Optional[datetime]
     created_at: datetime
 
     class Config:
@@ -29,4 +30,4 @@ class HeartbeatResponse(BaseModel):
 class TaskLogRequest(BaseModel):
     task_description: str
     status: TaskStatus = TaskStatus.RUNNING
-    execution_time: float | None = None
+    execution_time: Optional[float] = None

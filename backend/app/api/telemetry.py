@@ -1,4 +1,6 @@
 import json
+from typing import Dict, List
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from sqlalchemy import select
 
@@ -10,7 +12,7 @@ router = APIRouter(prefix="/telemetry", tags=["telemetry"])
 
 class TelemetryBroadcast:
     def __init__(self):
-        self.connections: list[WebSocket] = []
+        self.connections: List[WebSocket] = []
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
@@ -20,7 +22,7 @@ class TelemetryBroadcast:
         if websocket in self.connections:
             self.connections.remove(websocket)
 
-    async def broadcast(self, message: dict):
+    async def broadcast(self, message: Dict):
         for conn in self.connections:
             try:
                 await conn.send_json(message)

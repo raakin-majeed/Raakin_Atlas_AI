@@ -1,19 +1,27 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(BACKEND_ROOT / ".env"),
         env_file_encoding="utf-8",
         case_sensitive=False,
+        extra="ignore",
     )
 
     app_name: str = "Atlas AI Command Center"
     app_env: str = "development"
+    host: str = "0.0.0.0"
+    port: int = 8000
     log_level: str = "INFO"
     debug: bool = False
 
-    database_url: str = "postgresql+asyncpg://atlas:atlas_secret@localhost:5432/atlas_db"
+    DATABASE_URL: str = "sqlite+aiosqlite:///./academic.db"
     secret_key: str = "change-me-in-production"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
@@ -23,6 +31,8 @@ class Settings(BaseSettings):
     
     gemini_api_key: str = ""
     ai_model: str = "gemini-2.0-flash-exp"
+
+    GROQ_API_KEY: str = ""
     
     approved_email_domains: str = "atlasuniversity.edu.in"
     

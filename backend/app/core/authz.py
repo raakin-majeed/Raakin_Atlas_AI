@@ -1,7 +1,7 @@
 import json
 import re
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import HTTPException, status
 
@@ -18,7 +18,7 @@ class AuthorizationEngine:
         with open(AUTHZ_MAP_PATH, "r") as f:
             return json.load(f)
 
-    def _load_public_endpoints(self) -> list[str]:
+    def _load_public_endpoints(self) -> List[str]:
         with open(PUBLIC_MAP_PATH, "r") as f:
             data = json.load(f)
             return data.get("endpoints", [])
@@ -32,7 +32,7 @@ class AuthorizationEngine:
                 return True
         return False
 
-    def get_allowed_roles(self, path: str, method: str) -> Optional[list[str]]:
+    def get_allowed_roles(self, path: str, method: str) -> Optional[List[str]]:
         """Get list of roles allowed to access this endpoint."""
         # Check exact match first
         if path in self.authz_map:
