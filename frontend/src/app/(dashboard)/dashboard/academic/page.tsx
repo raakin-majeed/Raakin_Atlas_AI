@@ -14,23 +14,47 @@ export default function AcademicAgentPage() {
   const stats = {
     total: data.students.length,
     highRisk: data.analysis.filter(a => a.risk_level === "High").length,
-    avgAtt: data.students.length ? (data.students.reduce((acc, s) => acc + s.attendance, 0) / data.students.length).toFixed(1) : 0
+    avgAtt: data.students.length
+      ? (data.students.reduce((acc, s) => acc + (Number(s.average_attendance) ?? Number(s.attendance) ?? 0), 0) / data.students.length).toFixed(1)
+      : 0,
   };
 
   async function handleUpload() {
     if (!file) return;
     const formData = new FormData();
     formData.append("file", file);
-    await fetch("http://localhost:5000/api/academic/upload-data", { method: "POST", body: formData });
+    const res = await fetch("http://localhost:5000/api/academic/upload-data", { method: "POST", body: formData });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const msg = typeof json.detail === "string" ? json.detail : JSON.stringify(json.detail ?? "Upload failed");
+      alert("Upload failed: " + msg);
+      return;
+    }
     alert("Database Refreshed. Ready for AI Diagnostic.");
   }
 
   async function handleRunAI() {
     setLoading(true);
-    const res = await fetch("http://localhost:5000/api/academic/analyze-class");
-    const json = await res.json();
-    setData(json);
-    setLoading(false);
+    try {
+      const res = await fetch("http://localhost:5000/api/academic/analyze-class");
+      const json = await res.json();
+      console.log("AI Data Received:", json);
+      setData({
+        students: Array.isArray(json.students) ? json.students : [],
+        analysis: Array.isArray(json.analysis) ? json.analysis : [],
+      });
+    } catch (err) {
+      console.error("Run AI failed:", err);
+      setData({ students: [], analysis: [] });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function riskBadgeClass(level: string | undefined) {
+    if (level === "High") return "bg-red-100 text-red-700 border-red-200";
+    if (level === "Medium") return "bg-orange-100 text-orange-700 border-orange-200";
+    return "bg-emerald-100 text-emerald-700 border-emerald-200";
   }
 
   async function handleSend() {
@@ -51,7 +75,17 @@ export default function AcademicAgentPage() {
         <div className="flex gap-3 bg-white p-3 rounded-3xl shadow-sm border border-slate-100">
           <input type="file" onChange={e => setFile(e.target.files?.[0] || null)} className="text-sm self-center" />
           <button onClick={handleUpload} className="bg-slate-900 text-white px-6 py-2 rounded-2xl font-bold">Upload</button>
-          <button onClick={handleRunAI} className="bg-indigo-600 text-white px-6 py-2 rounded-2xl font-bold">
+          <button
+            onClick={handleRunAI}
+            disabled={loading}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-2xl font-bold inline-flex items-center gap-2 disabled:opacity-70 disabled:cursor-wait"
+          >
+            {loading && (
+              <span
+                className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                aria-hidden
+              />
+            )}
             {loading ? "Analyzing..." : "Run AI Diagnostic"}
           </button>
           {data.analysis.length > 0 && (
@@ -81,49 +115,85 @@ export default function AcademicAgentPage() {
         <table className="w-full text-left border-collapse">
           <thead className="bg-slate-50 border-b border-slate-100">
             <tr>
-              <th className="p-6 text-[10px] font-black uppercase text-slate-400">Student Info</th>
-              <th className="p-6 text-[10px] font-black uppercase text-slate-400">Attendance</th>
-              <th className="p-6 text-[10px] font-black uppercase text-slate-400">AI Persona</th>
-              <th className="p-6 text-[10px] font-black uppercase text-slate-400">Risk Status</th>
+              <th className="p-6 text-[10px] font-black uppercase text-slate-400">Student Name</th>
+              <th className="p-6 text-[10px] font-black uppercase text-slate-400">Overall Attendance</th>
+              <th className="p-6 text-[10px] font-black uppercase text-slate-400">At Risk Subjects</th>
+              <th className="p-6 text-[10px] font-black uppercase text-slate-400">Overall Risk Level</th>
+              <th className="p-6 text-[10px] font-black uppercase text-slate-400">AI Analysis</th>
               <th className="p-6 text-[10px] font-black uppercase text-slate-400">Action</th>
             </tr>
           </thead>
           <tbody>
             {data.students.map((s) => {
               const ai = getAI(s.student_id);
+              const displayName = s.student_name ?? s.name ?? s.student_id;
+              const failing = (s.failing_subjects ?? []) as string[];
+              const lowAtt = (s.low_attendance_subjects ?? []) as string[];
+              const att = Number(s.average_attendance ?? s.attendance) ?? 0;
+              const attBelow75 = att > 0 && att < 75;
+              const parts: string[] = [];
+              if (failing.length) parts.push(`Failing: ${failing.join(", ")}`);
+              if (lowAtt.length) parts.push(`Low attendance in: ${lowAtt.join(", ")}`);
+              const atRiskStr = parts.length ? parts.join(". ") : "None";
+              const hasRisk = failing.length > 0 || lowAtt.length > 0;
+              const analysisText = ai?.analysis ?? "—";
               return (
                 <tr key={s.student_id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-all">
                   <td className="p-6">
-                    <div className="font-bold text-slate-900">{s.name}</div>
+                    <div className="font-bold text-slate-900">{displayName}</div>
                     <div className="text-[10px] text-slate-400">{s.student_id}</div>
                   </td>
                   <td className="p-6">
-                    <div className="font-black text-slate-700">{s.attendance}%</div>
-                    <div className="w-24 h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
-                        <div className={`h-full ${s.attendance < 75 ? 'bg-red-500' : 'bg-emerald-500'}`} style={{width: `${s.attendance}%`}}></div>
-                    </div>
-                  </td>
-                  <td className="p-6">
-                    <span className="bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-xs font-bold italic border border-indigo-100">
-                        {ai?.persona || "Pending..."}
-                    </span>
-                  </td>
-                  <td className="p-6">
-                    <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase ${ai?.risk_level === 'High' ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                        {ai?.risk_level || "Analyzing..."}
-                    </span>
-                  </td>
-                  <td className="p-6">
-                    <button 
-                        onClick={() => setSelectedEmail(ai?.email_content)} 
-                        disabled={!ai}
-                        className="text-[10px] font-black text-slate-400 hover:text-indigo-600 underline uppercase transition-all"
+                    <span
+                      className={`font-black ${attBelow75 ? "text-red-600" : "text-slate-800"}`}
+                      title={attBelow75 ? "Ineligible for End-Sems" : undefined}
                     >
-                        Preview Draft
+                      {att}%
+                    </span>
+                    {attBelow75 && (
+                      <span
+                        className="ml-2 inline-block px-2 py-0.5 text-[9px] font-bold uppercase bg-red-100 text-red-700 rounded border border-red-200"
+                        title="Overall attendance below 75% — ineligible for End-Semester examinations"
+                      >
+                        Ineligible for End-Sems
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-6">
+                    <span className={`text-sm font-medium ${hasRisk ? "text-red-600" : "text-slate-500"}`}>
+                      {atRiskStr}
+                    </span>
+                  </td>
+                  <td className="p-6">
+                    <span
+                      className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase border ${riskBadgeClass(ai?.risk_level)}`}
+                    >
+                      {ai?.risk_level ?? "—"}
+                    </span>
+                  </td>
+                  <td
+                    className="p-6"
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      minWidth: 250,
+                      textAlign: "left",
+                    }}
+                  >
+                    <p className="text-xs text-slate-600" title={analysisText}>
+                      {analysisText}
+                    </p>
+                  </td>
+                  <td className="p-6">
+                    <button
+                      onClick={() => setSelectedEmail(ai?.email_content)}
+                      disabled={!ai}
+                      className="text-[10px] font-black text-slate-400 hover:text-indigo-600 underline uppercase transition-all"
+                    >
+                      Preview Draft
                     </button>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>

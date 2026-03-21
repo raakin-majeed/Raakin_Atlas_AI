@@ -1,19 +1,24 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+# Prevent Python from buffering logs or writing .pyc files
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONPATH=/app
 
-# No system deps needed: psycopg2-binary and asyncpg use pre-built wheels
+WORKDIR /app/backend
 
-# Copy requirements first for better layer caching
+# Install system dependencies for Postgres (psycopg2/asyncpg support)
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install requirements
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy application code (__pycache__ excluded via .dockerignore)
+# Copy the backend source code
 COPY . .
 
-# Run database migrations and start server
-CMD alembic upgrade head && \
-    uvicorn app.main:app --host ${HOST:-0.0.0.0} --port ${PORT:-8000} --reload
+EXPOSE 8000

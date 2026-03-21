@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:15-alpine
@@ -5,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: atlas_db
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -21,16 +23,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/postgres
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/atlas_db
       SECRET_KEY: supersecret
-      GROQ_API_KEY: ${GROQ_API_KEY}
+      PYTHONPATH: /app
+    volumes:
+      - ./backend:/app/backend
     command: >
       sh -c "
       echo 'Waiting for DB...' &&
-      sleep 8 &&
-      alembic upgrade head &&
-      uvicorn app.main:app --host 0.0.0.0 --port 8000
+      alembic upgrade head || echo 'Alembic skipped, starting server...' &&
+      uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
       "
 
   frontend:
@@ -40,9 +45,9 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
-    command: sh -c "npm install && npm run dev"
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8000
+    command: sh -c "npm install && npm run dev"
 
 volumes:
   pgdata:

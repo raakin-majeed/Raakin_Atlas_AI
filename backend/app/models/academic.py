@@ -27,6 +27,9 @@ class AcademicRecord(SQLModel, table=True):
     subject_name: str
     attendance: Optional[float] = None
     cia_scores: Optional[List[float]] = Field(default=None, sa_column=Column(JSON))
+    average_score: Optional[float] = None
+    trend: Optional[float] = None
+    ai_generated_analysis: Optional[str] = None
     mid_sem: Optional[float] = None
     end_sem: Optional[float] = None
     risk_status: Optional[str] = None
