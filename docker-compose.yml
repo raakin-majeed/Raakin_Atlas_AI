@@ -24,7 +24,7 @@ services:
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/postgres
       SECRET_KEY: supersecret
-      GROQ_API_KEY: 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
+      GROQ_API_KEY: ${GROQ_API_KEY}
     command: >
       sh -c "
       echo 'Waiting for DB...' &&
