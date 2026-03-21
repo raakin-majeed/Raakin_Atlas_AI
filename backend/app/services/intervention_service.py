@@ -216,20 +216,36 @@ async def analyze_with_groq(student_data: Dict[str, Any]) -> Dict[str, str]:
 
 
 async def ensure_academic_columns(db: AsyncSession) -> None:
-    # SQLite-safe schema patching for existing databases.
-    existing = await db.execute(text("PRAGMA table_info(academic_records)"))
-    cols = {row[1] for row in existing.fetchall()}
+    """
+    PostgreSQL-compatible schema patching. Uses information_schema to detect
+    existing columns, then adds missing ones. Works with postgresql+asyncpg.
+    """
+    try:
+        result = await db.execute(
+            text(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_schema = 'public' AND table_name = 'academic_records'"
+            )
+        )
+        cols = {row[0] for row in result.fetchall()}
+    except Exception:
+        cols = set()
+
     alter_statements = []
     if "average_score" not in cols:
-        alter_statements.append("ALTER TABLE academic_records ADD COLUMN average_score FLOAT")
+        alter_statements.append("ALTER TABLE academic_records ADD COLUMN average_score DOUBLE PRECISION")
     if "trend" not in cols:
-        alter_statements.append("ALTER TABLE academic_records ADD COLUMN trend FLOAT")
+        alter_statements.append("ALTER TABLE academic_records ADD COLUMN trend DOUBLE PRECISION")
     if "ai_generated_analysis" not in cols:
         alter_statements.append("ALTER TABLE academic_records ADD COLUMN ai_generated_analysis VARCHAR")
     if "mid_sem" not in cols:
-        alter_statements.append("ALTER TABLE academic_records ADD COLUMN mid_sem FLOAT")
+        alter_statements.append("ALTER TABLE academic_records ADD COLUMN mid_sem DOUBLE PRECISION")
+
     for stmt in alter_statements:
-        await db.execute(text(stmt))
+        try:
+            await db.execute(text(stmt))
+        except Exception:
+            pass
     if alter_statements:
         await db.commit()
 

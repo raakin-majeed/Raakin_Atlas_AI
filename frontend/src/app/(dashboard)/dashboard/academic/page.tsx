@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { API_BASE } from "@/lib/api";
 
 export default function AcademicAgentPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -23,20 +24,28 @@ export default function AcademicAgentPage() {
     if (!file) return;
     const formData = new FormData();
     formData.append("file", file);
-    const res = await fetch("http://localhost:5000/api/academic/upload-data", { method: "POST", body: formData });
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      const msg = typeof json.detail === "string" ? json.detail : JSON.stringify(json.detail ?? "Upload failed");
-      alert("Upload failed: " + msg);
-      return;
+    try {
+      const res = await fetch(`${API_BASE}/api/academic/upload-data`, { method: "POST", body: formData });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const msg = typeof json.detail === "string" ? json.detail : JSON.stringify(json.detail ?? "Upload failed");
+        alert("Upload failed: " + msg);
+        return;
+      }
+      alert("Database Refreshed. Ready for AI Diagnostic.");
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert(
+        `Could not reach the backend at ${API_BASE}. ` +
+        "Ensure the backend is running (e.g. uvicorn on port 8005 or docker compose up)."
+      );
     }
-    alert("Database Refreshed. Ready for AI Diagnostic.");
   }
 
   async function handleRunAI() {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/academic/analyze-class");
+      const res = await fetch(`${API_BASE}/api/academic/analyze-class`);
       const json = await res.json();
       console.log("AI Data Received:", json);
       setData({
@@ -45,6 +54,10 @@ export default function AcademicAgentPage() {
       });
     } catch (err) {
       console.error("Run AI failed:", err);
+      alert(
+        `Could not reach the backend at ${API_BASE}. ` +
+        "Ensure the backend is running (e.g. uvicorn on port 8005 or docker compose up)."
+      );
       setData({ students: [], analysis: [] });
     } finally {
       setLoading(false);
@@ -59,10 +72,19 @@ export default function AcademicAgentPage() {
 
   async function handleSend() {
     setSending(true);
-    const res = await fetch("http://localhost:5000/api/academic/send-interventions", { method: "POST" });
-    const json = await res.json();
-    setSending(false);
-    alert(`Success: ${json.emails_sent} Intervention emails sent by AI Agent.`);
+    try {
+      const res = await fetch(`${API_BASE}/api/academic/send-interventions`, { method: "POST" });
+      const json = await res.json();
+      alert(`Success: ${json.emails_sent} Intervention emails sent by AI Agent.`);
+    } catch (err) {
+      console.error("Send error:", err);
+      alert(
+        `Could not reach the backend at ${API_BASE}. ` +
+        "Ensure the backend is running (e.g. uvicorn on port 8005 or docker compose up)."
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   return (

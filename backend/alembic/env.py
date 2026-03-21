@@ -12,7 +12,12 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-sync_url = settings.DATABASE_URL.replace("+aiosqlite", "")
+# Alembic needs a sync driver: sqlite for SQLite, psycopg2 for PostgreSQL
+sync_url = settings.DATABASE_URL
+if "+aiosqlite" in sync_url:
+    sync_url = sync_url.replace("+aiosqlite", "")
+elif "+asyncpg" in sync_url:
+    sync_url = sync_url.replace("postgresql+asyncpg", "postgresql+psycopg2")
 # Include both SQLAlchemy Base and SQLModel metadata for migrations
 from sqlmodel import SQLModel
 target_metadata = [Base.metadata, SQLModel.metadata]

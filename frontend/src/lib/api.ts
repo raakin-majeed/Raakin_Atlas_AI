@@ -1,4 +1,4 @@
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8005";
 
 /**
  * Fetch helper — points all calls at the backend API base.
