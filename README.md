@@ -385,4 +385,6 @@ await audit.log_user_action(
 - [ ] Replace demo pages (Dashboard, Settings) with real data  
 - [ ] Customize `authz.map.json` for your roles and endpoints  
 - [ ] Change default admin password  
-- [ ] Update this README for your project  
+- [ ] Update this README for your project
+
+- [ ] [Read the full Academic Supervisor Agent Documentation here](./docs/agent-supervisor.md)
