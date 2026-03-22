@@ -1,0 +1,61 @@
+student_id,name,email,subject,attendance,cia1,cia2,mid_sem
+S401,Raakin Majeed,,Business Plan Writing,98.2,9,8,17
+S401,Raakin Majeed,,Advanced Machine Learning,94.4,10,10,19
+S401,Raakin Majeed,,Introduction to Algorithms,92.8,9,10,20
+S401,Raakin Majeed,,Big Data,90.4,10,9,20
+S401,Raakin Majeed,,Pinnacle,88.5,8,8,19
+S401,Raakin Majeed,,Data Engineering,93.8,10,8,18
+S402,Diya Mehta,raakin.majeed.btech2028@atlasskilltech.university,Business Plan Writing,49.7,7,6,13
+S402,Diya Mehta,raakin.majeed.btech2028@atlasskilltech.university,Advanced Machine Learning,50.9,6,7,12
+S402,Diya Mehta,raakin.majeed.btech2028@atlasskilltech.university,Introduction to Algorithms,46.5,6,7,12
+S402,Diya Mehta,raakin.majeed.btech2028@atlasskilltech.university,Big Data,49.8,7,6,12
+S402,Diya Mehta,raakin.majeed.btech2028@atlasskilltech.university,Pinnacle,63,7,6,14
+S402,Diya Mehta,raakin.majeed.btech2028@atlasskilltech.university,Data Engineering,61,7,6,14
+S403,Rohan Verma,,Business Plan Writing,77.4,6,8,12
+S403,Rohan Verma,,Advanced Machine Learning,73.3,6,7,14
+S403,Rohan Verma,,Introduction to Algorithms,75.8,5,7,14
+S403,Rohan Verma,,Big Data,75.4,7,8,15
+S403,Rohan Verma,,Pinnacle,77.7,5,7,13
+S403,Rohan Verma,,Data Engineering,78,5,6,14
+S404,Ananya Iyer,,Business Plan Writing,95.8,8,8,18
+S404,Ananya Iyer,,Advanced Machine Learning,97.2,8,8,16
+S404,Ananya Iyer,,Introduction to Algorithms,96.4,8,9,19
+S404,Ananya Iyer,,Big Data,95.3,10,8,20
+S404,Ananya Iyer,,Pinnacle,98.8,10,10,16
+S404,Ananya Iyer,,Data Engineering,95.8,8,9,20
+S405,Kabir Singh,,Business Plan Writing,84,2,3,8
+S405,Kabir Singh,,Advanced Machine Learning,83.1,2,2,9
+S405,Kabir Singh,,Introduction to Algorithms,85.4,2,3,7
+S405,Kabir Singh,,Big Data,83.4,3,2,6
+S405,Kabir Singh,,Pinnacle,80.2,4,2,5
+S405,Kabir Singh,,Data Engineering,86.6,2,3,8
+S406,Meera Nair,,Business Plan Writing,76.2,6,6,15
+S406,Meera Nair,,Advanced Machine Learning,75,7,6,15
+S406,Meera Nair,,Introduction to Algorithms,76.6,7,6,14
+S406,Meera Nair,,Big Data,74.5,7,7,13
+S406,Meera Nair,,Pinnacle,76,5,8,11
+S406,Meera Nair,,Data Engineering,74.7,7,6,12
+S407,Arjun Patel,,Business Plan Writing,89.5,10,9,16
+S407,Arjun Patel,,Advanced Machine Learning,93.7,8,10,16
+S407,Arjun Patel,,Introduction to Algorithms,95.9,9,9,20
+S407,Arjun Patel,,Big Data,97.2,8,10,18
+S407,Arjun Patel,,Pinnacle,92.1,10,8,18
+S407,Arjun Patel,,Data Engineering,94.4,10,9,20
+S408,Sneha Reddy,,Business Plan Writing,52.6,5,5,10
+S408,Sneha Reddy,,Advanced Machine Learning,41.3,6,5,10
+S408,Sneha Reddy,,Introduction to Algorithms,47.7,5,7,10
+S408,Sneha Reddy,,Big Data,42,5,6,11
+S408,Sneha Reddy,,Pinnacle,40.4,6,6,14
+S408,Sneha Reddy,,Data Engineering,52.5,5,5,10
+S409,Ishaan Gupta,,Business Plan Writing,74.8,7,8,15
+S409,Ishaan Gupta,,Advanced Machine Learning,76.5,7,8,15
+S409,Ishaan Gupta,,Introduction to Algorithms,73.4,6,7,14
+S409,Ishaan Gupta,,Big Data,77.3,5,8,11
+S409,Ishaan Gupta,,Pinnacle,77,5,8,13
+S409,Ishaan Gupta,,Data Engineering,76,7,6,11
+S410,Saanvi Sharma,,Business Plan Writing,89.8,9,9,17
+S410,Saanvi Sharma,,Advanced Machine Learning,89.9,8,10,20
+S410,Saanvi Sharma,,Introduction to Algorithms,88.4,9,8,19
+S410,Saanvi Sharma,,Big Data,93.7,8,9,20
+S410,Saanvi Sharma,,Pinnacle,98.8,9,10,20
+S410,Saanvi Sharma,,Data Engineering,88,9,9,18
