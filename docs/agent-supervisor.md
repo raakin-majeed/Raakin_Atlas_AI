@@ -1,1 +1,38 @@
-This revised documentation focuses strictly on the ATLAS AI Academic Supervisor agent itself—its intelligence, its reasoning logic, and its operational behavior—rather than the broader infrastructure.Technical Documentation: ATLAS AI Academic Supervisor Agent1. Agent DefinitionThe ATLAS AI Academic Supervisor is an autonomous cognitive agent designed for institutional oversight. Unlike standard rule-based systems, this agent utilizes Large Language Model (LLM) reasoning to evaluate student success trajectories and execute precision academic interventions.2. Core Intelligence: Gemini 3 FlashThe agent’s "brain" is powered by the Gemini 3 Flash model. This allows the Supervisor to move beyond simple threshold triggers (e.g., "if attendance < 75%") and instead perform Contextual Pattern Recognition.Longitudinal Analysis: The agent compares current data against historical trends in the atlas_final_test_mix dataset to detect velocity changes in student performance.Linguistic Synthesis: It transforms raw data points into professional, empathetic, and authoritative recovery plans, maintaining the formal tone required by a university supervisor.3. Operational Logic and Decision MatrixThe agent operates on a tripartite decision-making framework to classify student risk:Risk TierInput IndicatorsAgent ActionStable (Green)Consistent attendance; stable or rising grades.No action; continues silent monitoring.Monitoring (Amber)Minor fluctuations in activity; isolated grade drops.Generates a "Standard Observation" log; drafts a proactive check-in.Critical (Red)Significant downward trend; high absenteeism; failure risk.Triggers a "Supervisor’s Directive"; mandates a formal recovery plan.4. Primary CapabilitiesA. Data Reasoning (IKS Integration)The agent functions as an Intelligent Knowledge Studio. It ingests structured datasets (CSV/Excel) and builds a temporary cognitive map of the student body. It identifies correlations between disparate variables, such as a drop in LMS activity predicting a future drop in exam scores.B. Autonomous Communication (Mailman Engine)Once a risk is identified, the agent assumes the role of a communicator.Identity Assumption: It drafts correspondence from the perspective of an Academic Supervisor.Security Compliance: It strictly enforces domain-locking, ensuring communications are only sent to @atlasskilltech.university or authorized administrative aliases.C. Persistent Audit LoggingEvery decision made by the agent—every flag raised and every email drafted—is committed to a PostgreSQL-backed audit trail. This ensures the agent's "reasoning" can be reviewed by human faculty at any time, providing full transparency in the intervention process.5. Agent WorkflowObservation: The agent receives a batch of performance data from the atlas_final_test_mix source.Inference: It runs a comparative analysis to find students deviating from their established performance baselines.Action: For students flagged as Amber or Red, the agent generates a context-specific recovery strategy.Reporting: The agent updates the system status to "LIVE" and logs the completion of the intervention cycle.
+# Technical Documentation: ATLAS AI Academic Supervisor
+
+## 1. Agent Definition
+The ATLAS AI Academic Supervisor is an autonomous cognitive agent designed for institutional oversight. Unlike standard rule-based systems, this agent utilizes Large Language Model (LLM) reasoning to evaluate student success trajectories and execute precision academic interventions.
+
+## 2. Core Intelligence
+The agent intelligence is powered by the Gemini 3 Flash model. This allows the Supervisor to move beyond simple threshold triggers and perform Contextual Pattern Recognition.
+
+* Longitudinal Analysis: The agent compares current data against historical trends in the atlas_final_test_mix dataset to detect velocity changes in student performance.
+* Linguistic Synthesis: It transforms raw data points into professional, empathetic, and authoritative recovery plans, maintaining the formal tone required by a university supervisor.
+
+## 3. Operational Logic and Decision Matrix
+The agent operates on a tripartite decision-making framework to classify student risk:
+
+| Risk Tier | Input Indicators | Agent Action |
+| :--- | :--- | :--- |
+| Stable | Consistent attendance and stable grades | No action; continues silent monitoring |
+| Monitoring | Minor fluctuations in activity or isolated grade drops | Generates a Standard Observation log and drafts a check-in |
+| Critical | Significant downward trend and high absenteeism | Triggers a Supervisor Directive and mandates a recovery plan |
+
+## 4. Primary Capabilities
+
+### Data Reasoning
+The agent functions as an Intelligent Knowledge Studio. It ingests structured datasets and builds a temporary cognitive map of the student body. It identifies correlations between disparate variables, such as a drop in LMS activity predicting a future drop in exam scores.
+
+### Autonomous Communication
+Once a risk is identified, the agent assumes the role of a communicator.
+* Identity Assumption: It drafts correspondence from the perspective of an Academic Supervisor.
+* Security Compliance: It strictly enforces domain-locking, ensuring communications are only sent to authorized university domains.
+
+### Persistent Audit Logging
+Every decision made by the agent is committed to a PostgreSQL-backed audit trail. This ensures the agent reasoning can be reviewed by human faculty at any time, providing full transparency.
+
+## 5. Agent Workflow
+1. Observation: The agent receives a batch of performance data from the atlas_final_test_mix source.
+2. Inference: It runs a comparative analysis to find students deviating from established performance baselines.
+3. Action: For students flagged as Monitoring or Critical, the agent generates a context-specific recovery strategy.
+4. Reporting: The agent updates the system status to LIVE and logs the completion of the intervention cycle.
